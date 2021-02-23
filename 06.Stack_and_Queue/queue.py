@@ -13,8 +13,9 @@ class Queue:
     def peek(self):
         return self.first
 
-    def push(self, data):
+    def enqueue(self, data):
         new_node = Node(data)
+        self.length += 1
 
         if not self.first:
             self.first = new_node
@@ -22,38 +23,45 @@ class Queue:
         if not self.last:
             self.last = new_node
         else:
-            new_node.next = self.last
+            # new_node.next = self.last
+            # self.last = new_node
+            self.last.next = new_node
             self.last = new_node
         return True
 
-    def pop(self):
-        actual_node = self.last
-        while actual_node:
-            if actual_node.next is None:
-                self.first = previous_node
-                self.first.next = None
-            previous_node = actual_node
-            actual_node = actual_node.next
+    def dequeue(self):
+        if self.length == 0:
+            return
+
+        if self.first == self.last:
+            return None
+
+        removed_node = self.first
+        self.first = self.first.next
+        self.length -= 1
+        return removed_node.data
 
     def traverse(self):
-        actual_node = self.last
+        actual_node = self.first
         while actual_node:
-            print(f"{actual_node.data} -> ", end='')
-            self.first = actual_node.next
+            print(f" <- {actual_node.data}", end='')
             actual_node = actual_node.next
 
 
 q = Queue()
-q.push('google')
-q.push('microsoft')
-q.push('facebook')
-q.push('amazon')
+q.enqueue('google')
+q.enqueue('microsoft')
+q.enqueue('facebook')
+q.enqueue('amazon')
 q.traverse()
-q.pop()
+print()
+print('removed node: ', q.dequeue())
+# print('removed node: ', q.dequeue())
 print()
 q.traverse()
-# item = q.peek()
-# print(item.data)
-# q.pop()
-# item = q.peek()
-# print(item.data)
+print()
+item = q.peek()
+print('item peeked: ', item.data)
+
+
+print('items: ', q.length)
